@@ -1,3 +1,4 @@
+import re
 from collections import OrderedDict
 from coreapi.compat import urlparse
 from openapi_codec.utils import get_method, get_encoding, get_location, get_links_from_document
@@ -43,6 +44,12 @@ def _get_links(document):
         if len(keys) > 1:
             operation_id = '_'.join(keys[1:])
             tags = [keys[0]]
+
+            # gbataille. Based on our specific URL pattern
+            endpoint = "/".join(keys)
+            m = re.match(ur'.*api/(v\d+)/(.*?)/.*', endpoint)
+            if m:
+                tags = ["%s-%s" % (m.group(1), m.group(2))]
         else:
             operation_id = keys[0]
             tags = []
