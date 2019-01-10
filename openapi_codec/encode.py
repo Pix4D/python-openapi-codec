@@ -49,9 +49,13 @@ def _get_links(document):
 
             # gbataille. Based on our specific URL pattern
             endpoint = "/".join(keys)
-            m = re.match(r'.*api/(v\d+)/(.*?)/.*', endpoint)
+            m = re.match(r'rest/(\w+)/(v\d+)/(.*?)/.*', endpoint)
             if m:
-                tags = ["%s-%s" % (m.group(1), m.group(2))]
+                tags = ["%s-%s-%s" % (m.group(2), m.group(1), m.group(3))]
+            else:
+                m = re.match(r'.*api/(v\d+)/(.*?)/.*', endpoint)
+                if m:
+                    tags = ["%s-%s" % (m.group(1), m.group(2))]
         else:
             operation_id = keys[0]
             tags = []
